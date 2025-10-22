@@ -4,16 +4,19 @@ import pygame
 from settings import *
 from ray_casting import ray_casting
 from map import mini_map
+from player import *
 
 class Drawing:
     def __init__(self, sc, sc_map):
         self.sc = sc
         self.sc_map = sc_map
         self.font = pygame.font.SysFont('Arial', 36, bold=True)
+        #текстуры
         self.textures = {'1': pygame.image.load("image/388673.jpg").convert(),
                          '2': pygame.image.load("image/owl_1.jpg").convert(),
                          '3': pygame.image.load("image/pngtree-mystery-forest-with-big-dark-green-pine-trees-picture-image_2049712.jpg").convert(),
                          'S': pygame.image.load("image/sky_1.jpg").convert(),
+                         'T': pygame.image.load("image/trava_1.png").convert()
                          }
 
     def background(self, angle):
@@ -24,6 +27,10 @@ class Drawing:
         self.sc.blit(self.textures['S'], (sky_offset - width, 0))
         self.sc.blit(self.textures['S'], (sky_offset + width, 0))
         pygame.draw.rect(self.sc, dark_green, (0, half_height, width, half_height))
+        # sky_offset = -5 * math.degrees(angle) % height
+        # self.sc.blit(self.textures['S'], (sky_offset, 0))
+        # self.sc.blit(self.textures['S'], (sky_offset - height, 0))
+        # self.sc.blit(self.textures['S'], (sky_offset + height, 0))
 
     #рекаст
     def world(self, player_position, player_angle):
@@ -33,6 +40,11 @@ class Drawing:
         display_fps = str(int(clock.get_fps()))
         render = self.font.render(display_fps, 0, red)
         self.sc.blit(render, fps_pos)
+
+    def health(self, ps_health):
+        display_health = str(int(ps_health))
+        pass
+
     def mini_map(self, player):
         self.sc_map.fill(black)
         map_x, map_y = player.x // map_scale, player.y // map_scale
@@ -42,3 +54,10 @@ class Drawing:
         for x, y in mini_map:
             pygame.draw.rect(self.sc_map, sandy, (x, y, map_tile, map_tile))
         self.sc.blit(self.sc_map, map_pos)
+
+    def fireballs(self, player):
+        for fireball in player.fireballs:
+            # текстура огненного шара
+            fire_img = pygame.image.load("image/fireball.png").convert_alpha()
+            rect = fire_img.get_rect(center=(int(fireball.x), int(fireball.y)))
+            self.sc.blit(fire_img, rect)

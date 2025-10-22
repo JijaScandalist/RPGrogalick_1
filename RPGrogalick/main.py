@@ -5,6 +5,7 @@ import math
 from map import world_map
 from ray_casting import ray_casting
 from drawing import Drawing
+from equipment import Fireball
 
 pygame.init()
 sc = pygame.display.set_mode((width, height))
@@ -12,6 +13,9 @@ sc_map = pygame.Surface((width // map_scale, height // map_scale))
 clock = pygame.time.Clock() #fps
 player = Player()
 drawing = Drawing(sc, sc_map)
+pygame.mouse.set_visible(False)
+
+fireballs = []
 
 while True:
     for event in pygame.event.get():
@@ -20,13 +24,16 @@ while True:
     player.movement()
     sc.fill(black) #закраска поверхности
 
-    #пол и потолок
-    # pygame.draw.rect(sc, skyblue, (0, 0, width, half_height))
-    # pygame.draw.rect(sc, dark_green, (0, half_height, width, half_height))
+    # #пол и потолок
+    # pygame.draw.rect(sc, skyblue, (0, 0, width, half_height - player.ver_a))
+    # pygame.draw.rect(sc, dark_green, (0, half_height - player.ver_a, width, half_height + player.ver_a))
+
+    #отрисовка
     drawing.background(player.angle)
     drawing.world(player.position, player.angle)
+    drawing.fireballs(player) #атака
     drawing.fps(clock)
-    drawing.mini_map(player)
+    # drawing.mini_map(player) #мини карту потом доделать
 
     # pygame.draw.circle(sc, green, (int(player.x), int(player.y)), 12)
     # pygame.draw.line(sc, blue, player.position, (player.x + width * math.cos(player.angle), player.y + height * math.sin(player.angle)))
@@ -34,7 +41,7 @@ while True:
     #     pygame.draw.rect(sc, red, (x, y, tile, tile), 2)
 
     pygame.display.flip()
-    clock.tick(fps)
+    clock.tick()
 
 
 

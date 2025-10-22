@@ -38,6 +38,7 @@ def color_r(): #рандомный цвет (на всякий случай)
 #player settings
 player_position = (half_width, half_height)
 player_angle = 0
+player_ver_angle = 0
 player_speed = 2
 
 #rays
@@ -59,3 +60,5 @@ map_pos = (0, height - height // map_scale)
 texture_width = 1200
 texture_height = 1200
 texture_scale = texture_width // tile
+
+ps_health = 5

@@ -1,8 +1,9 @@
 import pygame
 from settings import *
 from map import world_map
+from player import *
 
-#функция принимает поверхность отрисовки, позицию и угол игрока
+# функция принимает поверхность отрисовки, позицию и угол игрока
 # def ray_casting(sc, player_position, player_angle):
 #     cur_angle = player_angle - half_fov
 #     xo, yo = player_position
@@ -20,10 +21,8 @@ from map import world_map
 #                 #глубина поверхностей
 #                 c = 255 // (1 + depth * depth * 0.00002)
 #                 color = (c, c // 2, c // 3)
-#
 #                 # c_1 = 128 // (1 + depth * depth * 0.0001)
 #                 # color_1 = (c_1, c_1, c_1)
-#
 #                 pygame.draw.rect(sc, color, (ray * scale, half_height - proj_height // 2, scale, proj_height))
 #                 break
 #         cur_angle += delta_angle
@@ -32,22 +31,17 @@ def mapping(a, b):
     return (a // tile) * tile, (b // tile) * tile
 
 def ray_casting(sc, player_position, player_angle, textures):
+    global texture_v, texture_h
     ox, oy = player_position
     xm, ym = (ox // tile) * tile, (oy // tile) * tile
     cur_angle = player_angle - half_fov
     for ray in range(num_rays):
         sin_a = math.sin(cur_angle)
         cos_a = math.cos(cur_angle)
-
         #verticals
-        # if cos >= 0:
-        #     x = xm + tile
-        #     dx = 1
-        # else:
-        #     x = xm
-        #     dx = -1
-
         x, dx = (xm + tile, 1) if cos_a >= 0 else (xm, -1)
+        foended = False
+
         #все вертикали в цикле
         for i in range(0, width, tile):
             depth_v = (x - ox) / cos_a
@@ -55,6 +49,7 @@ def ray_casting(sc, player_position, player_angle, textures):
             tile_v = mapping (x + dx, yv)
             if tile_v in world_map:
                 texture_v = world_map[tile_v]
+                foended = True
                 break
             x += dx * tile
 
@@ -66,30 +61,32 @@ def ray_casting(sc, player_position, player_angle, textures):
             tile_h = mapping(xh, y + dy)
             if tile_h in world_map:
                 texture_h = world_map[tile_h]
+                foended = True
                 break
             y += dy * tile
 
-        #projection
-        depth, offset, texture = (depth_v, yv, texture_v) if depth_v < depth_h else (depth_h, xh, texture_h)
-        offset = int(offset) % tile
-        #убрать эффект рыб глаза
-        depth *= math.cos(player_angle - cur_angle)
-        depth = max(depth, 0.00001)
-        #proj_height = proj_coef // depth
-        proj_height = min(int(proj_coef / depth), 2 * height)
+        if foended:
+            #projection
+            depth, offset, texture = (depth_h, xh, texture_h) if depth_v >= depth_h else (depth_v, yv, texture_v)
+            offset = int(offset) % tile
 
-        #глубина поверхностей
-        # c = 255 // (1 + depth * depth * 0.00002)
-        # color = (c, c // 2, c // 3)
-        #
-        # # c_1 = 128 // (1 + depth * depth * 0.0001)
-        # # color_1 = (c_1, c_1, c_1)
-        #
-        # pygame.draw.rect(sc, color, (ray * scale, half_height - proj_height // 2, scale, proj_height))
+            #убрать эффект рыб глаза
+            depth *= math.cos(player_angle - cur_angle)
+            depth = max(depth, 0.00001)
 
-        wall_column = textures[texture].subsurface(offset * texture_scale, 0, texture_scale, texture_height)
-        wall_column = pygame.transform.scale(wall_column, (scale, proj_height))
-        sc.blit(wall_column, (ray * scale, half_height - proj_height // 2))
+            #proj_height = proj_coef // depth
+            proj_height = min(int(proj_coef / depth), 2 * height)
 
-        cur_angle += delta_angle
+            #глубина поверхностей
+            # c = 255 // (1 + depth * depth * 0.00002)
+            # color = (c, c // 2, c // 3)
+            # # c_1 = 128 // (1 + depth * depth * 0.0001)
+            # # color_1 = (c_1, c_1, c_1)
+            # pygame.draw.rect(sc, color, (ray * scale, half_height - proj_height // 2, scale, proj_height))
+
+            wall_column = textures[texture].subsurface(offset * texture_scale, 0, texture_scale, texture_height)
+            wall_column = pygame.transform.scale(wall_column, (scale, proj_height))
+            sc.blit(wall_column, (ray * scale, (half_height - proj_height // 2)))
+
+            cur_angle += delta_angle
 
