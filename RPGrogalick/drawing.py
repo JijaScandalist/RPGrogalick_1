@@ -54,7 +54,7 @@ class Drawing:
             'slime_small_left': pygame.image.load("sprites_txt/slime-move-2.png").convert_alpha(),
             'slime_small_right': pygame.image.load("sprites_txt/slime-move-3.png").convert_alpha(),
 
-            # Если нет всех текстур, можно использовать одну для всех:
+            # Если нет всех текстур
             # 'enemy_front': pygame.image.load("image/enemy.png").convert_alpha(),
             # И в других: self.textures['enemy_back'] = self.textures['enemy_front']
 
@@ -85,8 +85,7 @@ class Drawing:
 
         
         # pygame.draw.rect(self.sc, dark_green, (0, half_height, width, half_height))
-
-    # ОБНОВЛЕНО: теперь принимает player вместо отдельных параметров
+    
     def world(self, player):
         ray_casting(self.sc, player.position, player.angle, self.textures, player.pitch)
 
@@ -204,7 +203,7 @@ class Drawing:
 
             self.sc.blit(dark_sprite, (sprite_x, sprite_y))
 
-            # НОВОЕ: Отладочная информация о расстоянии (можно убрать)
+            
             if distance < 200:  # Показываем только для близких врагов
                 debug_font = pygame.font.SysFont('Arial', 16)
                 dist_text = debug_font.render(f"{int(distance)}px", True, (255, 255, 0))
@@ -244,5 +243,6 @@ class Drawing:
         crosshair_x = half_width - 16
         crosshair_y = half_height - 16
         self.sc.blit(crosshair_texture, (crosshair_x, crosshair_y))
+
 
 
