@@ -14,7 +14,7 @@ width = 1200
 height = 800
 half_width = width // 2
 half_height = height // 2
-fps = 60
+fps = 40
 tile = 100
 fps_pos = (width - 65, 5)
 
@@ -32,23 +32,24 @@ cyan = (0, 255, 255)
 magenta = (255, 0, 255)
 skyblue = (0, 128, 255)
 sandy = (144, 164, 96)
-def color_r(): #рандомный цвет (на всякий случай)
+def color_r(): #рандомный цвет
     return (randint(0, 255), randint(0, 255), randint(0, 255))
 
 #player settings
 player_position = (half_width, half_height)
 player_angle = 0
 player_ver_angle = 0
-player_speed = 2
+player_speed = 3
+player_height = 500
 
 #rays
 fov = math.pi / 3
 half_fov = fov / 2
-num_rays = 300
+num_rays = 100
 max_depth = 800
 delta_angle = fov / num_rays
 dist = num_rays / (2 * math.tan(half_fov))
-proj_coef = 3 * dist * tile
+proj_coef = 10 * dist * tile
 scale = width // num_rays
 
 #minimap settings
@@ -62,3 +63,8 @@ texture_height = 1200
 texture_scale = texture_width // tile
 
 ps_health = 5
+
+
+player_attack_range = 80  # Дальность атаки игрока
+enemy_attack_range = 10    # Дальность атаки врагов
+attack_angle = math.pi / 2.5  # Угол атаки (~72°)
