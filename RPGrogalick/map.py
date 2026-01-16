@@ -40,7 +40,7 @@ text_map = [
     '3333333333333333'
 ]
 
-# НОВОЕ: КАРТА ПОЛА (точно так же как text_map!)
+# КАРТА ПОЛА (точно так же как text_map!)
 # Здесь каждая цифра = текстура пола
 # 0 = нет пола (пустота), 1 = floor1, 2 = floor2, и т.д.
 floor_text_map = [
@@ -61,7 +61,7 @@ floor_text_map = [
 
 ]
 
-# НОВОЕ: КАРТА ПОТОЛКА (опционально)
+# КАРТА ПОТОЛКА (опционально)
 ceiling_text_map = [
     '0000000000000000',
     '0000000000000000',
@@ -94,7 +94,7 @@ for j, row in enumerate(text_map):
                 world_map[(i * tile, j * tile)] = 'R'
 
 
-# НОВОЕ: Обработка карты ПОЛА
+# Обработка карты ПОЛА
 for j, row in enumerate(floor_text_map):
     for i, char in enumerate(row):
         if char != '0' and char != '.':  # 0 или . = пустота (нет пола)
@@ -110,7 +110,7 @@ for j, row in enumerate(floor_text_map):
                 floor_map[(i * tile, j * tile)] = 'floor5'
             # Можно добавить больше текстур пола
 
-# НОВОЕ: Обработка карты ПОТОЛКА
+# Обработка карты ПОТОЛКА
 for j, row in enumerate(ceiling_text_map):
     for i, char in enumerate(row):
         if char != '0' and char != '.':
@@ -120,3 +120,4 @@ for j, row in enumerate(ceiling_text_map):
                 ceiling_map[(i * tile, j * tile)] = 'ceiling2'
             elif char == '3':
                 ceiling_map[(i * tile, j * tile)] = 'ceiling3'
+
