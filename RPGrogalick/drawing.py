@@ -83,7 +83,7 @@ class Drawing:
         self.sc.blit(self.textures['S'], (sky_offset - width, 0))
         self.sc.blit(self.textures['S'], (sky_offset + width, 0))
 
-        # НЕ рисуем пол здесь - он рисуется через floorcasting
+        
         # pygame.draw.rect(self.sc, dark_green, (0, half_height, width, half_height))
 
     # ОБНОВЛЕНО: теперь принимает player вместо отдельных параметров
@@ -155,7 +155,7 @@ class Drawing:
             if not sprite.alive:
                 continue
 
-            # ВАЖНО: Проверяем, не закрыт ли спрайт стеной
+            # Проверяем, не закрыт ли спрайт стеной
             if not ray_casting_for_sprite(player.position, sprite.position, player.angle, world_map):
                 continue
 
@@ -181,7 +181,7 @@ class Drawing:
             else:
                 texture = sprite.textures.get('front', list(sprite.textures.values())[0])
 
-            # УЛУЧШЕННОЕ масштабирование - используем NEAREST для пикселизации
+            #  используем NEAREST для пикселизации
             scaled_sprite = pygame.transform.scale(
                 texture,
                 (projection['sprite_width'], projection['sprite_height'])
@@ -191,7 +191,7 @@ class Drawing:
             sprite_x = projection['screen_x'] - projection['sprite_width'] // 2
             sprite_y = half_height - projection['sprite_height'] // 2 + projection['pitch_offset']
 
-            # УЛУЧШЕННОЕ затемнение - более плавное
+            # затемнение
             distance = projection['distance']
             shade = max(0.2, 1.0 - distance * 0.0015)
 
@@ -244,4 +244,5 @@ class Drawing:
         crosshair_x = half_width - 16
         crosshair_y = half_height - 16
         self.sc.blit(crosshair_texture, (crosshair_x, crosshair_y))
+
 
